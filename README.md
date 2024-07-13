@@ -33,19 +33,7 @@ First, import the necessary components from the package:
 
 ```typescript
 import { ModValidationAny } from '@veive/mod-valid-any-op';
-```
-
-### Example Implementation
-
-Create a validation module by extending `ModValidationAny`:
-
-```typescript
-import { ModValidationAny } from '@veive/mod-valid-any-op';
-
-class MyOperationValidationModule extends ModValidationAny {
-  // Your implementation here
-}
-```
+```t a  
 
 ### Example Usage
 
