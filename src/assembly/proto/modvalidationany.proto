@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package modvalidationany;
+
+import "koinos/options.proto";
+
+message allowances_storage {
+    repeated allowance allowances = 1;
+}
+
+message config_storage {
+    repeated uint32 skip_entry_points = 1;
+}
+
+message operation {
+    bytes contract_id = 1 [(koinos.btype) = ADDRESS];
+    uint32 entry_point = 2;
+    bytes args = 3;
+}
+
+message allowance {
+    bytes tx_id = 1;
+    bytes caller = 2 [(koinos.btype) = ADDRESS];
+    operation operation = 3;
+}
+
+message allow_args {
+    bytes user = 1 [(koinos.btype) = ADDRESS];
+    operation operation = 2;
+}
+
+message get_allowances_result {
+    repeated allowance value = 1;
+}
+
+message add_skip_entry_point_args {
+  uint32 entry_point = 1;
+}
+
+message remove_skip_entry_point_args {
+  uint32 entry_point = 1;
+}
+
+message get_skip_entry_points_result {
+  repeated uint32 value = 1;
+}
