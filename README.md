@@ -6,7 +6,7 @@ ERC-7579 defines a standard interface for modular smart accounts. In this contex
 
 ## How It Works
 
-The `ModValidAnyOp` module allows users to pre-authorize specific operations and validate them during execution. Here’s how it works:
+The `ModValidationAny` module allows users to pre-authorize specific operations and validate them during execution. Here’s how it works:
 
 1. **Allowance Creation**:
    - Users can create allowances (pre-authorizations) for specific operations using the `allow` method. These allowances are stored and tied to the transaction ID to ensure they are used only within the same transaction.
@@ -32,17 +32,17 @@ npm install @veive/mod-valid-any-op
 First, import the necessary components from the package:
 
 ```typescript
-import { ModValidAnyOp } from '@veive/mod-valid-any-op';
+import { ModValidationAny } from '@veive/mod-valid-any-op';
 ```
 
 ### Example Implementation
 
-Create a validation module by extending `ModValidAnyOp`:
+Create a validation module by extending `ModValidationAny`:
 
 ```typescript
-import { ModValidAnyOp } from '@veive/mod-valid-any-op';
+import { ModValidationAny } from '@veive/mod-valid-any-op';
 
-class MyOperationValidationModule extends ModValidAnyOp {
+class MyOperationValidationModule extends ModValidationAny {
   // Your implementation here
 }
 ```
@@ -53,7 +53,7 @@ The `is_valid_operation` method returns `true` by default because all installed 
 
 ### Example Usage
 
-Here is an example of how to use the `ModValidAnyOp` module to prepare, allow, and execute an operation:
+Here is an example of how to use the `ModValidationAny` module to prepare, allow, and execute an operation:
 
 ```typescript
 // prepare operation
