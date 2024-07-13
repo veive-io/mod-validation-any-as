@@ -33,7 +33,7 @@ First, import the necessary components from the package:
 
 ```typescript
 import { ModValidationAny } from '@veive/mod-valid-any-op';
-```t a  
+```
 
 ### Example Usage
 
