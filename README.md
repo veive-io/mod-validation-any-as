@@ -47,10 +47,6 @@ class MyOperationValidationModule extends ModValidationAny {
 }
 ```
 
-### Default Return Values for Validation Methods
-
-The `is_valid_operation` method returns `true` by default because all installed validation modules must approve an operation for it to be considered valid. Conversely, the `is_valid_signature` method returns `false` by default because the signature validation process stops as soon as one module approves the signature.
-
 ### Example Usage
 
 Here is an example of how to use the `ModValidationAny` module to prepare, allow, and execute an operation:
