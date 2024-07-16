@@ -4,6 +4,10 @@ package modvalidationany;
 
 import "koinos/options.proto";
 
+message account_id {
+   bytes value = 1 [(koinos.btype) = ADDRESS];
+}
+
 message allowances_storage {
     repeated allowance allowances = 1;
 }

@@ -84,29 +84,6 @@ beforeAll(async () => {
     utils.tokenAbi
   );
 
-  // install validator
-  const { operation: install_module } = await account1Contract["install_module"]({
-    module_type_id: 2,
-    contract_id: modSign.address
-  }, { onlyOperation: true });
-
-  const tx = new Transaction({
-      signer: account1Sign,
-      provider
-  });
-
-  const { operation: exec } = await account1Contract["execute_user"]({
-      operation: {
-          contract_id: install_module.call_contract.contract_id,
-          entry_point: install_module.call_contract.entry_point,
-          args: install_module.call_contract.args
-      }
-  }, { onlyOperation: true });
-
-  await tx.pushOperation(exec);
-  await tx.send();
-  await tx.wait();
-
   // mint some tokens to user
   const tx2 = new Transaction({
     signer: tokenSign,
@@ -124,6 +101,37 @@ beforeAll(async () => {
 afterAll(() => {
   // stop local-koinos node
   localKoinos.stopNode();
+});
+
+it("install module", async () => {
+  // install validator
+  const { operation: install_module } = await account1Contract["install_module"]({
+    module_type_id: 2,
+    contract_id: modSign.address
+  }, { onlyOperation: true });
+
+  const tx = new Transaction({
+    signer: account1Sign,
+    provider
+  });
+
+  const { operation: exec } = await account1Contract["execute_user"]({
+    operation: {
+      contract_id: install_module.call_contract.contract_id,
+      entry_point: install_module.call_contract.entry_point,
+      args: install_module.call_contract.args
+    }
+  }, { onlyOperation: true });
+
+  await tx.pushOperation(exec);
+  const receipt = await tx.send();
+  await tx.wait();
+
+  expect(receipt).toBeDefined();
+  expect(receipt.logs).toContain("[mod-validation-any] called on_install");
+
+  const { result } = await account1Contract["get_modules"]();
+  expect(result.value[0]).toStrictEqual(modSign.address);
 });
 
 it("account1 tries a transfer with unlegit allowance", async () => {
@@ -167,7 +175,7 @@ it("account1 tries a transfer with unlegit allowance", async () => {
   }
 
   // expect fail check
-  expect(JSON.parse(error.message).logs).toContain(`[mod-valid-any-op] fail ${transfer.call_contract.entry_point}`);
+  expect(JSON.parse(error.message).logs).toContain(`[mod-validation-any] fail ${transfer.call_contract.entry_point}`);
 
   // expect unaltered balances
   const { result: r1 } = await tokenContract["balanceOf"]({
@@ -186,7 +194,7 @@ it("account1 tries a transfer with unlegit allowance", async () => {
 });
 
 it("account1 tries a transfer with legit allowance", async () => {
-    // prepare operation
+  // prepare operation
   const { operation: transfer } = await tokenContract['transfer']({
     from: account1Sign.address,
     to: account2Sign.address,
@@ -204,8 +212,8 @@ it("account1 tries a transfer with legit allowance", async () => {
   }, { onlyOperation: true });
 
   const tx = new Transaction({
-      signer: account1Sign,
-      provider,
+    signer: account1Sign,
+    provider,
   });
 
   await tx.pushOperation(allow);
@@ -216,8 +224,8 @@ it("account1 tries a transfer with legit allowance", async () => {
   expect(receipt).toBeDefined();
   console.log(receipt);
 
-  expect(receipt.logs).toContain('[mod-valid-any-op] skip allow');
-  expect(receipt.logs).toContain(`[mod-valid-any-op] allowing ${transfer.call_contract.entry_point}`);
+  expect(receipt.logs).toContain('[mod-validation-any] skip allow');
+  expect(receipt.logs).toContain(`[mod-validation-any] allowing ${transfer.call_contract.entry_point}`);
 
   // check balances
   const { result: r1 } = await tokenContract["balanceOf"]({
@@ -233,4 +241,62 @@ it("account1 tries a transfer with legit allowance", async () => {
   expect(r2).toStrictEqual({
     value: "1",
   });
+});
+
+it("add skip entry_point", async () => {
+  // prepare operation to obtain entry_point
+  const { operation: transfer } = await tokenContract['transfer']({
+    from: account1Sign.address,
+    to: account2Sign.address,
+    value: "1",
+  }, { onlyOperation: true });
+
+  // set skip entry point
+  const { operation: set_config } = await modContract['add_skip_entry_point']({
+    entry_point: transfer.call_contract.entry_point
+  }, { onlyOperation: true });
+
+  const tx = new Transaction({
+    signer: account1Sign,
+    provider,
+  });
+
+  await tx.pushOperation(set_config);
+  const receipt = await tx.send();
+  await tx.wait();
+
+  expect(receipt).toBeDefined();
+
+  const { result } = await modContract['get_skip_entry_points']();
+  expect(result.value).toStrictEqual([transfer.call_contract.entry_point]);
+});
+
+it("operation skipped", async () => {
+  // prepare operation
+  const { operation: transfer } = await tokenContract['transfer']({
+    from: account1Sign.address,
+    to: account2Sign.address,
+    value: "1",
+  }, { onlyOperation: true });
+
+  // validate operation
+  const { operation: validate } = await modContract['is_valid_operation']({
+    operation: {
+      contract_id: transfer.call_contract.contract_id,
+      entry_point: transfer.call_contract.entry_point,
+      args: transfer.call_contract.args
+    }
+  }, { onlyOperation: true });
+
+  const tx = new Transaction({
+    signer: account1Sign,
+    provider,
+  });
+
+  await tx.pushOperation(validate);
+  const receipt = await tx.send();
+  await tx.wait();
+
+  expect(receipt).toBeDefined();
+  expect(receipt.logs).toContain(`[mod-validation-any] skip ${transfer.call_contract.entry_point.toString()}`);
 });

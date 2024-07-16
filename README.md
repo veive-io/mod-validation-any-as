@@ -22,7 +22,7 @@ The `ModValidationAny` module allows users to pre-authorize specific operations 
 To install the package, use npm or yarn:
 
 ```bash
-npm install @veive/mod-valid-any-op
+npm install @veive/mod-validation-any-as
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ npm install @veive/mod-valid-any-op
 First, import the necessary components from the package:
 
 ```typescript
-import { ModValidationAny } from '@veive/mod-valid-any-op';
+import { ModValidationAny } from '@veive/mod-validation-any-as';
 ```
 
 ### Example Usage

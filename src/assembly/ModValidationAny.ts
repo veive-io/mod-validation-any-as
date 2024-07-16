@@ -4,6 +4,7 @@ import { modvalidationany } from "./proto/modvalidationany";
 
 const ALLOWANCES_SPACE_ID = 1;
 const CONFIG_SPACE_ID = 2;
+const ACCOUNT_SPACE_ID = 3;
 
 /**
  * The ModValidationAny class extends the ModValidation base class and provides implementation
@@ -40,13 +41,14 @@ export class ModValidationAny extends ModValidation {
       () => new modvalidationany.config_storage()
     );
 
-  manifest(): modvalidation.manifest {
-    const result = new modvalidation.manifest();
-    result.name = "Any operation validator";
-    result.description = "Module to validate any operation";
-    result.type_id = MODULE_VALIDATION_TYPE_ID;
-    return result;
-  }
+  account_id: Storage.Obj<modvalidationany.account_id> =
+    new Storage.Obj(
+      this.contractId,
+      ACCOUNT_SPACE_ID,
+      modvalidationany.account_id.decode,
+      modvalidationany.account_id.encode,
+      () => new modvalidationany.account_id()
+    );
 
   /**
    * Validate operation by checking allowance
@@ -58,7 +60,7 @@ export class ModValidationAny extends ModValidation {
       Arrays.equal(args.operation!.contract_id!, this.contractId) == true &&
       args.operation!.entry_point == 1090552691
     ) {
-      System.log(`[mod-valid-any-op] skip allow`);
+      System.log(`[mod-validation-any] skip allow`);
       return new modvalidation.is_valid_operation_result(true);
     }
 
@@ -66,11 +68,11 @@ export class ModValidationAny extends ModValidation {
     if (
       this.config_storage.get()!.skip_entry_points.includes(args.operation!.entry_point)
     ) {
-      System.log(`[mod-valid-any-op] skip ${args.operation!.entry_point.toString()}`);
+      System.log(`[mod-validation-any] skip ${args.operation!.entry_point.toString()}`);
       return new modvalidation.is_valid_operation_result(true);
     }
 
-    System.log(`[mod-valid-any-op] checking ${args.operation!.entry_point.toString()}`);
+    System.log(`[mod-validation-any] checking ${args.operation!.entry_point.toString()}`);
 
     const allowances_storage = this.allowances_storage.get();
     if (allowances_storage && allowances_storage.allowances.length > 0) {
@@ -84,7 +86,7 @@ export class ModValidationAny extends ModValidation {
           allowance.operation!.entry_point == args.operation!.entry_point == true &&
           Arrays.equal(allowance.operation!.args, args.operation!.args!) == true
         ) {
-          System.log(`[mod-valid-any-op] allowing ${args.operation!.entry_point.toString()}`);
+          System.log(`[mod-validation-any] allowing ${args.operation!.entry_point.toString()}`);
           this._remove_allowance(i);
           return new modvalidation.is_valid_operation_result(true);
         }
@@ -92,7 +94,7 @@ export class ModValidationAny extends ModValidation {
 
     }
 
-    System.log(`[mod-valid-any-op] fail ${args.operation!.entry_point.toString()}`);
+    System.log(`[mod-validation-any] fail ${args.operation!.entry_point.toString()}`);
 
     return new modvalidation.is_valid_operation_result(false);
   }
@@ -191,5 +193,27 @@ export class ModValidationAny extends ModValidation {
     const config = this.config_storage.get();
     System.require(config != null, "Configuration not found");
     return new modvalidationany.get_skip_entry_points_result(config!.skip_entry_points);
+  }
+
+  /**
+   * @external
+   */
+  on_install(args: modvalidation.on_install_args): void {
+    const account = new modvalidationany.account_id();
+    account.value = System.getCaller().caller;
+    this.account_id.put(account);
+    System.log('[mod-validation-any] called on_install');
+  }
+
+  /**
+   * @external
+   * @readonly
+   */
+  manifest(): modvalidation.manifest {
+    const result = new modvalidation.manifest();
+    result.name = "Any operation validator";
+    result.description = "Module to validate any operation";
+    result.type_id = MODULE_VALIDATION_TYPE_ID;
+    return result;
   }
 }
