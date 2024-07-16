@@ -105,7 +105,7 @@ export class ModValidationAny extends ModValidation {
    */
   allow(args: modvalidationany.allow_args): void {
     const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
-    System.require(isAuthorized, `not authorized by ${Base58.encode(this._get_account_id())}`);
+    System.require(isAuthorized, `not authorized by the account`);
 
     const allowances_storage = this.allowances_storage.get() || new modvalidationany.allowances_storage([]);
 
@@ -132,7 +132,7 @@ export class ModValidationAny extends ModValidation {
    */
   add_skip_entry_point(args: modvalidationany.add_skip_entry_point_args): void {
     const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
-    System.require(isAuthorized, `not authorized by ${Base58.encode(this._get_account_id())}`);
+    System.require(isAuthorized, `not authorized by the account`);
 
     const config = this.config_storage.get() || new modvalidationany.config_storage();
 
@@ -155,7 +155,7 @@ export class ModValidationAny extends ModValidation {
    */
   remove_skip_entry_point(args: modvalidationany.remove_skip_entry_point_args): void {
     const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
-    System.require(isAuthorized, `not authorized by ${Base58.encode(this._get_account_id())}`);
+    System.require(isAuthorized, `not authorized by the account`);
 
     const config = this.config_storage.get();
     System.require(config != null, "Configuration not found");
