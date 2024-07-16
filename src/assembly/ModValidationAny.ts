@@ -206,6 +206,16 @@ export class ModValidationAny extends ModValidation {
   }
 
   /**
+   * Get associated account_id
+   * 
+   * @external
+   * @readonly
+   */
+  get_account_id(): modvalidationany.account_id {
+    return this.account_id.get()!;
+  }
+
+  /**
    * return account id
    */
   _get_account_id(): Uint8Array {
