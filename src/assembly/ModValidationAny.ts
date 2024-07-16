@@ -104,18 +104,17 @@ export class ModValidationAny extends ModValidation {
    * @external
    */
   allow(args: modvalidationany.allow_args): void {
-    const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, args.user!);
-    System.require(isAuthorized, `not authorized by ${Base58.encode(args.user!)}`);
+    const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
+    System.require(isAuthorized, `not authorized by ${Base58.encode(this._get_account_id())}`);
 
     const allowances_storage = this.allowances_storage.get() || new modvalidationany.allowances_storage([]);
 
     const allowance = new modvalidationany.allowance();
     allowance.tx_id = System.getTransactionField("id")!.bytes_value;
     allowance.operation = args.operation!
-    allowance.caller = args.user!;
+    allowance.caller = this._get_account_id();
 
     allowances_storage.allowances.push(allowance);
-
     this.allowances_storage.put(allowances_storage);
   }
 
@@ -128,26 +127,13 @@ export class ModValidationAny extends ModValidation {
   }
 
   /**
-   * remove allowance by index
-   */
-  _remove_allowance(index: u32): void {
-    const new_allowances = new modvalidationany.allowances_storage([]);
-
-    const allowances_storage = this.allowances_storage.get()!;
-    for (let i = 0; i < allowances_storage.allowances.length; i++) {
-      if (i != index) {
-        new_allowances.allowances.push(allowances_storage.allowances[i]);
-      }
-    }
-
-    this.allowances_storage.put(new_allowances);
-  }
-
-  /**
    * Adds an antry point to skip list
    * @external
    */
   add_skip_entry_point(args: modvalidationany.add_skip_entry_point_args): void {
+    const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
+    System.require(isAuthorized, `not authorized by ${Base58.encode(this._get_account_id())}`);
+
     const config = this.config_storage.get() || new modvalidationany.config_storage();
 
     // Check for duplicates
@@ -168,6 +154,9 @@ export class ModValidationAny extends ModValidation {
    * @external
    */
   remove_skip_entry_point(args: modvalidationany.remove_skip_entry_point_args): void {
+    const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
+    System.require(isAuthorized, `not authorized by ${Base58.encode(this._get_account_id())}`);
+
     const config = this.config_storage.get();
     System.require(config != null, "Configuration not found");
 
@@ -214,5 +203,28 @@ export class ModValidationAny extends ModValidation {
     result.description = "Module to validate any operation";
     result.type_id = MODULE_VALIDATION_TYPE_ID;
     return result;
+  }
+
+  /**
+   * return account id
+   */
+  _get_account_id(): Uint8Array {
+    return this.account_id.get()!.value!;
+  }
+
+  /**
+   * remove allowance by index
+   */
+  _remove_allowance(index: u32): void {
+    const new_allowances = new modvalidationany.allowances_storage([]);
+
+    const allowances_storage = this.allowances_storage.get()!;
+    for (let i = 0; i < allowances_storage.allowances.length; i++) {
+      if (i != index) {
+        new_allowances.allowances.push(allowances_storage.allowances[i]);
+      }
+    }
+
+    this.allowances_storage.put(new_allowances);
   }
 }

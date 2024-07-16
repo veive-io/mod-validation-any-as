@@ -29,7 +29,6 @@ message allowance {
 }
 
 message allow_args {
-    bytes user = 1 [(koinos.btype) = ADDRESS];
     operation operation = 2;
 }
 

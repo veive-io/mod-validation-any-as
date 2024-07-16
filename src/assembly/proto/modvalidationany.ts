@@ -244,12 +244,6 @@ export namespace modvalidationany {
 
   export class allow_args {
     static encode(message: allow_args, writer: Writer): void {
-      const unique_name_user = message.user;
-      if (unique_name_user !== null) {
-        writer.uint32(10);
-        writer.bytes(unique_name_user);
-      }
-
       const unique_name_operation = message.operation;
       if (unique_name_operation !== null) {
         writer.uint32(18);
@@ -266,10 +260,6 @@ export namespace modvalidationany {
       while (reader.ptr < end) {
         const tag = reader.uint32();
         switch (tag >>> 3) {
-          case 1:
-            message.user = reader.bytes();
-            break;
-
           case 2:
             message.operation = operation.decode(reader, reader.uint32());
             break;
@@ -283,14 +273,9 @@ export namespace modvalidationany {
       return message;
     }
 
-    user: Uint8Array | null;
     operation: operation | null;
 
-    constructor(
-      user: Uint8Array | null = null,
-      operation: operation | null = null
-    ) {
-      this.user = user;
+    constructor(operation: operation | null = null) {
       this.operation = operation;
     }
   }

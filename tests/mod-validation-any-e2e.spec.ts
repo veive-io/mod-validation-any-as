@@ -252,8 +252,18 @@ it("add skip entry_point", async () => {
   }, { onlyOperation: true });
 
   // set skip entry point
-  const { operation: set_config } = await modContract['add_skip_entry_point']({
+  const { operation: add_skip_entry_point } = await modContract['add_skip_entry_point']({
     entry_point: transfer.call_contract.entry_point
+  }, { onlyOperation: true });
+
+  // allow operation
+  const { operation: allow } = await modContract['allow']({
+    user: account1Sign.address,
+    operation: {
+      contract_id: add_skip_entry_point.call_contract.contract_id,
+      entry_point: add_skip_entry_point.call_contract.entry_point,
+      args: add_skip_entry_point.call_contract.args
+    }
   }, { onlyOperation: true });
 
   const tx = new Transaction({
@@ -261,7 +271,8 @@ it("add skip entry_point", async () => {
     provider,
   });
 
-  await tx.pushOperation(set_config);
+  await tx.pushOperation(allow);
+  await tx.pushOperation(add_skip_entry_point);
   const receipt = await tx.send();
   await tx.wait();
 
