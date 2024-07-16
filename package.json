@@ -1,6 +1,6 @@
 {
   "name": "@veive/mod-validation-any-as",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Validation any operation module for Veive",
   "author": {
     "name": "veive",
@@ -24,7 +24,7 @@
   "main": "index.ts",
   "files": [
     "index.ts",
-    "build"
+    "dist"
   ],
   "dependencies": {
     "@koinos/sdk-as": "npm:@koinosbox/sdk-as@1.1.0-alpha.4",
