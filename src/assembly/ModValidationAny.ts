@@ -104,7 +104,6 @@ export class ModValidationAny extends ModValidation {
    * @external
    */
   allow(args: modvalidationany.allow_args): void {
-    // REPLACE WITH is_valid_signature call //
     const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, args.user!);
     System.require(isAuthorized, `not authorized by ${Base58.encode(args.user!)}`);
 
