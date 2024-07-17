@@ -106,7 +106,7 @@ afterAll(() => {
 it("install module", async () => {
   // install validator
   const { operation: install_module } = await account1Contract["install_module"]({
-    module_type_id: 2,
+    module_type_id: 1,
     contract_id: modSign.address
   }, { onlyOperation: true });
 

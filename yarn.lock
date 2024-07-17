@@ -1764,35 +1764,25 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@veive/account-as@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@veive/account-as/-/account-as-1.0.7.tgz#c0da2476fe3b104654c0ce838dc97e5f5fd0bcb0"
-  integrity sha512-GW+tDAdtGLcm55FwwUNnCqCDqrb7B2YRw2u6n5HtX2LtjEj2DqzYtWx7CuC7px6YV3S1RTKW/SZhEzIpMtvCVQ==
+"@veive/account-as@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@veive/account-as/-/account-as-1.0.12.tgz#a62142d6285fa5ae019602ed108eb50915561344"
+  integrity sha512-Pvj2FvFUbeZGitKnKqoqLhNef2ZnJu/+PEfkMdVHcMHpUCjun45Tr10CvHrqNL1hXw96WTPKiGl5qrHV3u6ywg==
   dependencies:
     "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
     "@koinosbox/contracts" "^2.1.4"
     "@koinosbox/hdkoinos" "1.0.1"
-    "@veive/mod-execution-as" "^1.0.5"
-    "@veive/mod-hooks-as" "^1.0.6"
-    "@veive/mod-validation-as" "^1.0.11"
+    "@veive/mod-execution-as" "^1.0.6"
+    "@veive/mod-hooks-as" "^1.0.7"
+    "@veive/mod-sign-as" "^1.0.2"
+    "@veive/mod-validation-as" "^1.0.14"
     koilib "^8.0.0"
     koinos-precompiler-as "^1.6.0"
 
-"@veive/mod-execution-as@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@veive/mod-execution-as/-/mod-execution-as-1.0.5.tgz#75796acdb705e57e9b4b18525c37b6c93ab85465"
-  integrity sha512-tbA1TEQCOX43ZQa4ShWDAO+6OBdwcIlFBvWbBKR6fXH0EHIy0n7PErTH2e5ebd9iMsqavpgRpDRQJ4VdvU8nrA==
-  dependencies:
-    "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
-    "@koinosbox/contracts" "^2.1.4"
-    "@koinosbox/hdkoinos" "1.0.1"
-    koilib "^8.0.0"
-    koinos-precompiler-as "^1.6.0"
-
-"@veive/mod-hooks-as@^1.0.6":
+"@veive/mod-execution-as@^1.0.6":
   version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@veive/mod-hooks-as/-/mod-hooks-as-1.0.6.tgz#e2109ff188605ddb48da9f200102644006bf6caf"
-  integrity sha512-/TZ3D3Wbc4skW0nKfWzF/4yHIy519zXSRUQgwqGmhdTXWc3YXkRdyxrDUxu2CaSCI7Meh6KvsK3Qp+DD21A9Cg==
+  resolved "https://registry.yarnpkg.com/@veive/mod-execution-as/-/mod-execution-as-1.0.6.tgz#01ec152f74dc68755a0198dce5cd5e0cd30a14d5"
+  integrity sha512-NsfqW6X0Dk1j0R53rstna0ph77af95mCFdzUJnzUwB7n7ooKOEmpQ8GbqrF3LvaRjIMbhXSY4o26rCBlI5FlMA==
   dependencies:
     "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
     "@koinosbox/contracts" "^2.1.4"
@@ -1800,10 +1790,32 @@
     koilib "^8.0.0"
     koinos-precompiler-as "^1.6.0"
 
-"@veive/mod-validation-as@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@veive/mod-validation-as/-/mod-validation-as-1.0.11.tgz#c34e2cf970b81f33d3221ca1663d94782a5dc426"
-  integrity sha512-QCt5oAX3EhZHkKC4PnikXHb/Gryh+B1VUw/0hQCfNxsUfxrDmeWWyN4DAB+NIyNltmqXth9aBlhLpEANFBWAWA==
+"@veive/mod-hooks-as@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@veive/mod-hooks-as/-/mod-hooks-as-1.0.7.tgz#2c6ac2b1d25d719c5e4da3ec98bff5205116cfd7"
+  integrity sha512-+2ODA83Ox6Mkr+sUBDBVWBly4QNbRMIm3oki6QTINZgTRqP33yraqRgp7SnVGbFdKRYZAlpC+QN+WB2G7XArWA==
+  dependencies:
+    "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
+    "@koinosbox/contracts" "^2.1.4"
+    "@koinosbox/hdkoinos" "1.0.1"
+    koilib "^8.0.0"
+    koinos-precompiler-as "^1.6.0"
+
+"@veive/mod-sign-as@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@veive/mod-sign-as/-/mod-sign-as-1.0.2.tgz#df33853722ff7cc1ce8b2e798226625ee1b86df1"
+  integrity sha512-Y0vZlqJA1kYMiIoTOIUbVCaNFN7sR70Q4jHJ5oMRZMV4rfL9OX+P7R5Zn/hX3Rh3qy3U0tCL8F0nKOIV0pBgXg==
+  dependencies:
+    "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
+    "@koinosbox/contracts" "^2.1.4"
+    "@koinosbox/hdkoinos" "1.0.1"
+    koilib "^8.0.0"
+    koinos-precompiler-as "^1.6.0"
+
+"@veive/mod-validation-as@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@veive/mod-validation-as/-/mod-validation-as-1.0.14.tgz#1daa475e21febcfe02d729c5260f0b7a55c91735"
+  integrity sha512-oAIg1tvyN5kw2eWsrgCVQ1sOXU95NSbVgIU9FWY1aE+2PFSJ+hAc2PBc5ItjMyYcb1OxDIYR0EpnhRYHtAg+3Q==
   dependencies:
     "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
     "@koinosbox/contracts" "^2.1.4"

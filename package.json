@@ -30,7 +30,7 @@
     "@koinos/sdk-as": "npm:@koinosbox/sdk-as@1.1.0-alpha.4",
     "@koinosbox/contracts": "^2.1.4",
     "@koinosbox/hdkoinos": "1.0.1",
-    "@veive/account-as": "^1.0.8",
+    "@veive/account-as": "^1.0.12",
     "koilib": "^5.6.1",
     "koinos-precompiler-as": "^1.6.0"
   },
