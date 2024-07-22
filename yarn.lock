@@ -1764,10 +1764,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@veive/account-as@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@veive/account-as/-/account-as-1.0.13.tgz#323c212dd245c1c4f8f1f4741995cd8c4f471b61"
-  integrity sha512-0PmxjRoGCCQDjfziGqpfKa3KGH2IXJG3LhRhLYSGKJbAVYwoef20TJR9Q3qmQU5dGAtepYojHvAeIifVxl5THg==
+"@veive/account-as@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@veive/account-as/-/account-as-1.0.14.tgz#2e4c0eadaa83a127930a1919fa70418a65dd377c"
+  integrity sha512-iIfinyiK9optQmR05FZt4fXOKjWbb4XpcziKCfC+gLPeaKgsrNxzv21XT5lHJXVHKViXdhlTYBjfnTYXJi7YeA==
   dependencies:
     "@koinos/sdk-as" "npm:@koinosbox/sdk-as@1.1.0-alpha.4"
     "@koinosbox/contracts" "^2.1.4"
