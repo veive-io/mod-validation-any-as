@@ -109,7 +109,7 @@ afterAll(() => {
   localKoinos.stopNode();
 });
 
-it("install module", async () => {
+it("install module in scope default", async () => {
   const scope = await modSerializer.serialize({
     entry_point: 1
   }, "scope");
@@ -255,7 +255,7 @@ it("account1 tries a transfer with legit allowance", async () => {
 });
 
 
-it("reinstall module with different scope", async () => {
+it("reinstall module in scope (entry_point=transfer)", async () => {
   // uninstall module
   const { operation: uninstall_module } = await account1Contract["uninstall_module"]({
     module_type_id: 1,
