@@ -255,7 +255,7 @@ it("account1 tries a transfer with legit allowance", async () => {
 });
 
 
-it("add skip entry_point", async () => {
+it("reinstall module with different scope", async () => {
   // uninstall module
   const { operation: uninstall_module } = await account1Contract["uninstall_module"]({
     module_type_id: 1,
@@ -270,14 +270,24 @@ it("add skip entry_point", async () => {
     }
   }, { onlyOperation: true });
 
-  // prepare operation to obtain entry_point
+  // allow uninstall_module operation
+  const { operation: allow } = await modContract['allow']({
+    user: account1Sign.address,
+    operation: {
+      contract_id: uninstall_module.call_contract.contract_id,
+      entry_point: uninstall_module.call_contract.entry_point,
+      args: uninstall_module.call_contract.args
+    }
+  }, { onlyOperation: true });
+
+  // prepare operation to obtain a new entry_point scope
   const { operation: transfer } = await tokenContract['transfer']({
     from: account1Sign.address,
     to: account2Sign.address,
     value: "1",
   }, { onlyOperation: true });
 
-  // install validator
+  // install module with the new scope
   const scope = await modSerializer.serialize({
     entry_point: transfer.call_contract.entry_point
   }, "scope");
@@ -298,16 +308,6 @@ it("add skip entry_point", async () => {
     }
   }, { onlyOperation: true });
 
-  // allow operation
-  const { operation: allow } = await modContract['allow']({
-    user: account1Sign.address,
-    operation: {
-      contract_id: uninstall_module.call_contract.contract_id,
-      entry_point: uninstall_module.call_contract.entry_point,
-      args: uninstall_module.call_contract.args
-    }
-  }, { onlyOperation: true });
-
   const tx = new Transaction({
     signer: account1Sign,
     provider,
@@ -319,7 +319,8 @@ it("add skip entry_point", async () => {
   const receipt = await tx.send();
   await tx.wait();
 
-  //expect(receipt.logs).toContain(`[mod-validation-any] skip ${transfer.call_contract.entry_point.toString()}`);
+  console.log(receipt);
+
   expect(receipt).toBeDefined();
 });
 
@@ -345,7 +346,7 @@ it("operation skipped", async () => {
   await tx.pushOperation(validate);
   const receipt = await tx.send();
   await tx.wait();
-  
+
   expect(receipt).toBeDefined();
   expect(receipt.logs).toContain(`[mod-validation-any] fail ${test.call_contract.entry_point}`);
 });

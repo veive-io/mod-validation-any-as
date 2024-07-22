@@ -1,9 +1,8 @@
-import { System, Storage, authority, Base58, Arrays } from "@koinos/sdk-as";
+import { System, Storage, authority, Arrays } from "@koinos/sdk-as";
 import { modvalidation, ModValidation, MODULE_VALIDATION_TYPE_ID } from "@veive/mod-validation-as";
 import { modvalidationany } from "./proto/modvalidationany";
 
 const ALLOWANCES_SPACE_ID = 1;
-const CONFIG_SPACE_ID = 2;
 const ACCOUNT_SPACE_ID = 3;
 
 /**
@@ -32,15 +31,6 @@ export class ModValidationAny extends ModValidation {
       () => new modvalidationany.allowances_storage()
     );
 
-  config_storage: Storage.Obj<modvalidationany.config_storage> =
-    new Storage.Obj(
-      this.contractId,
-      CONFIG_SPACE_ID,
-      modvalidationany.config_storage.decode,
-      modvalidationany.config_storage.encode,
-      () => new modvalidationany.config_storage()
-    );
-
   account_id: Storage.Obj<modvalidationany.account_id> =
     new Storage.Obj(
       this.contractId,
@@ -61,14 +51,6 @@ export class ModValidationAny extends ModValidation {
       args.operation!.entry_point == 1090552691
     ) {
       System.log(`[mod-validation-any] skip allow`);
-      return new modvalidation.is_valid_operation_result(true);
-    }
-
-    // check if operation entry_point is in skip list
-    if (
-      this.config_storage.get()!.skip_entry_points.includes(args.operation!.entry_point)
-    ) {
-      System.log(`[mod-validation-any] skip ${args.operation!.entry_point.toString()}`);
       return new modvalidation.is_valid_operation_result(true);
     }
 

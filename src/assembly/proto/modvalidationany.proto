@@ -12,10 +12,6 @@ message allowances_storage {
     repeated allowance allowances = 1;
 }
 
-message config_storage {
-    repeated uint32 skip_entry_points = 1;
-}
-
 message operation {
     bytes contract_id = 1 [(koinos.btype) = ADDRESS];
     uint32 entry_point = 2;
