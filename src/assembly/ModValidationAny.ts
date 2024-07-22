@@ -127,63 +127,6 @@ export class ModValidationAny extends ModValidation {
   }
 
   /**
-   * Adds an antry point to skip list
-   * @external
-   */
-  add_skip_entry_point(args: modvalidationany.add_skip_entry_point_args): void {
-    const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
-    System.require(isAuthorized, `not authorized by the account`);
-
-    const config = this.config_storage.get() || new modvalidationany.config_storage();
-
-    // Check for duplicates
-    for (let i = 0; i < config.skip_entry_points.length; i++) {
-      if (config.skip_entry_points[i] == args.entry_point) {
-        System.log("Entry point already exists");
-        return;
-      }
-    }
-
-    // Add new entry
-    config.skip_entry_points.push(args.entry_point);
-    this.config_storage.put(config);
-  }
-
-  /**
-   * Removes an antry point from skips
-   * @external
-   */
-  remove_skip_entry_point(args: modvalidationany.remove_skip_entry_point_args): void {
-    const isAuthorized = System.checkAuthority(authority.authorization_type.contract_call, this._get_account_id());
-    System.require(isAuthorized, `not authorized by the account`);
-
-    const config = this.config_storage.get();
-    System.require(config != null, "Configuration not found");
-
-    const new_skip_entry_points: u32[] = [];
-
-    for (let i = 0; i < config!.skip_entry_points.length; i++) {
-      if (config!.skip_entry_points[i] != args.entry_point) {
-        new_skip_entry_points.push(config!.skip_entry_points[i]);
-      }
-    }
-
-    config!.skip_entry_points = new_skip_entry_points;
-    this.config_storage.put(config!);
-  }
-
-  /**
-   * Reads the skip_entry_points
-   * @external
-   * @readonly
-   */
-  get_skip_entry_points(): modvalidationany.get_skip_entry_points_result {
-    const config = this.config_storage.get();
-    System.require(config != null, "Configuration not found");
-    return new modvalidationany.get_skip_entry_points_result(config!.skip_entry_points);
-  }
-
-  /**
    * @external
    */
   on_install(args: modvalidation.on_install_args): void {

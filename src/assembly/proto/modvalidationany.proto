@@ -35,15 +35,3 @@ message allow_args {
 message get_allowances_result {
     repeated allowance value = 1;
 }
-
-message add_skip_entry_point_args {
-  uint32 entry_point = 1;
-}
-
-message remove_skip_entry_point_args {
-  uint32 entry_point = 1;
-}
-
-message get_skip_entry_points_result {
-  repeated uint32 value = 1;
-}
