@@ -127,6 +127,9 @@ export class ModValidationAny extends ModValidation {
     result.name = "Any operation validator";
     result.description = "Module to validate any operation";
     result.type_id = MODULE_VALIDATION_TYPE_ID;
+    result.scopes = [
+      new modvalidation.scope(1)
+    ];
     return result;
   }
 
