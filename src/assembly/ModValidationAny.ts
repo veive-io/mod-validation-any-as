@@ -5,18 +5,6 @@ import { modvalidationany } from "./proto/modvalidationany";
 const ALLOWANCES_SPACE_ID = 1;
 const ACCOUNT_SPACE_ID = 3;
 
-/**
- * The ModValidationAny class extends the ModValidation base class and provides implementation
- * for validating any operation within the Veive smart account system on the Koinos blockchain.
- * 
- * This class allows users to pre-authorize specific operations (known as allowances) and validate
- * them during execution by comparing the operation's contract ID, entry point, and arguments against
- * the stored allowances. Additionally, it ensures that the allowance is tied to a specific transaction
- * ID, guaranteeing that it can only be used within the same transaction.
- * 
- * The module is configurable, allowing certain entry points to be skipped from validation.
- * This flexibility is useful for bypassing the validation logic for specific operations.
- */
 export class ModValidationAny extends ModValidation {
   callArgs: System.getArgumentsReturn | null;
 

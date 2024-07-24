@@ -1,45 +1,75 @@
-### Veive SCA Any Operation Validator Module
+## **Mod Validation Any**
 
-This package provides the interface and implementation for an "any operation" validator module that adds functionality to the Veive smart account on the Koinos blockchain. It is inspired by the ERC-7579 standard.
+### **Overview**
 
-ERC-7579 defines a standard interface for modular smart accounts. In this context, a module represents a pluggable unit that adds specific functionality to a smart account. The any operation validator module specifically handles the task of validating any operation by comparing it against pre-authorized allowances.
+`ModValidationAny` is a comprehensive validation module within the Veive protocol, designed specifically for the Koinos blockchain. This module employs an allowance mechanism to pre-authorize operations, ensuring that only actions explicitly approved by the user are executed. By leveraging this mechanism, `ModValidationAny` provides robust control over transaction execution, preventing unauthorized actions and potential replay attacks. Notably, this module is also applicable for validating internal operations, ensuring that even operations triggered within a contract are authorized.
 
-## How It Works
+### **Functional Description**
 
-The `ModValidationAny` module allows users to pre-authorize specific operations and validate them during execution. Here’s how it works:
+#### **Purpose and Functionality**
 
-1. **Allowance Creation**:
-   - Users can create allowances (pre-authorizations) for specific operations using the `allow` method. These allowances are stored and tied to the transaction ID to ensure they are used only within the same transaction.
+The `ModValidationAny` module serves as a pivotal component in the Veive ecosystem by validating operations against a set of pre-authorized allowances. This functionality is crucial for both external and internal operations, ensuring comprehensive security and control. Key features include:
 
-2. **Operation Validation**:
-   - When an operation is executed, the module checks the stored allowances to validate the operation. It compares the contract ID, entry point, and arguments of the operation, as well as the transaction ID, to ensure the operation is authorized.
+- **Allowance Mechanism**: Users can pre-authorize specific operations using the `allow` method, which stores details such as the operation's contract ID, entry point, arguments, and transaction ID. This mechanism prevents unauthorized transactions and ensures that each allowance is tied to a specific transaction, preventing reuse. This feature is particularly important for managing internal operations, where contracts may invoke additional operations.
 
-3. **Skip Entry Points**:
-   - The module can be configured to skip validation for specific entry points. This is useful when certain operations should bypass the validation logic of this module.
+- **Validation Process**: During execution, `ModValidationAny` checks if the incoming operation matches any stored allowances. It verifies transaction ID, contract ID, entry point, and arguments. If a match is found, the corresponding allowance is removed, ensuring that it cannot be reused, thus preventing replay attacks. This process includes verifying allowances for operations that may be internally triggered by other contracts, ensuring a comprehensive validation scope.
 
-## Installation
+- **Scope Management**: The default scope for `ModValidationAny` is set to "any," meaning it can validate any operation unless a more specific scope is defined. This flexibility allows for the module's application across a broad range of scenarios, from general validation to specific contract operations.
 
-To install the package, use npm or yarn:
+### **Technical Implementation**
+
+#### **Key Components and Methods**
+
+1. **Storage Objects**
+   - `allowances_storage`: This object stores all allowances, defined as `modvalidationany.allowances_storage`. It includes all authorized operations and their respective details.
+   - `account_id`: Stores the account ID associated with the module, ensuring that only authorized accounts can manage or interact with it.
+
+2. **Methods**
+   - **`is_valid_operation`**:
+     - **Purpose**: Validates an operation by checking against existing allowances.
+     - **Implementation**: The method first checks if the operation itself is an "allow" operation, skipping validation to prevent recursive validation loops. It then iterates through the stored allowances to find a match, verifying transaction ID, contract ID, entry point, and arguments. If a match is found, the allowance is removed to prevent reuse, ensuring that each allowance is single-use and linked to a specific transaction. This validation covers both user-initiated operations and internal operations triggered within smart contracts.
+
+   - **`allow`**:
+     - **Purpose**: Registers an operation as pre-authorized.
+     - **Implementation**: Verifies the authorization of the caller using `System.checkAuthority`. Upon authorization, the operation details and transaction ID are recorded in `allowances_storage`, creating a unique allowance. This step is crucial for both external and internal operations, allowing users to pre-authorize complex transaction flows.
+
+   - **`get_allowances`**:
+     - **Purpose**: Retrieves all allowances associated with the account.
+     - **Implementation**: Returns a list of allowances currently stored, providing an overview of all pre-authorized operations.
+
+   - **`on_install`**:
+     - **Purpose**: Initializes the module upon installation.
+     - **Implementation**: Captures the caller’s ID as `account_id`, ensuring that only the correct account can manage the module's allowances.
+
+   - **`manifest`**:
+     - **Purpose**: Provides metadata and configuration settings for the module.
+     - **Implementation**: Returns details such as the module’s name, description, type ID, and the default scope, which is "any".
+
+   - **Private Methods**:
+     - **`_get_account_id`**: Retrieves the stored account ID.
+     - **`_remove_allowance`**: Removes an allowance entry from `allowances_storage` by index, ensuring that allowances cannot be reused.
+
+### **Scopes and Context**
+
+The default scope for `ModValidationAny` is "any," allowing it to validate any operation in the absence of more specific scope definitions. This flexibility means the module can serve as a universal validator, covering a wide range of scenarios without the need for granular scope definitions. It ensures that any operation, whether user-initiated or internally triggered within a contract, is subject to validation.
+
+### **Usage**
+
+#### **Installation**
+
+To install the `ModValidationAny` module, ensure you have the Veive protocol set up on your Koinos blockchain environment. Install the module using yarn:
 
 ```bash
-npm install @veive/mod-validation-any-as
+yarn add @veive/mod-validation-any-as
 ```
 
-## Usage
+Deploy the module contract on the Koinos blockchain and install it on the desired account using the `install_module` method provided by the Veive account interface. During installation, the `on_install` method is called to set the necessary configurations and link the module to the account.
 
-### Importing the Package
+#### **Example**
 
-First, import the necessary components from the package:
+Here is an example of how to use `ModValidationAny`:
 
-```typescript
-import { ModValidationAny } from '@veive/mod-validation-any-as';
-```
-
-### Example Usage
-
-Here is an example of how to use the `ModValidationAny` module to prepare, allow, and execute an operation:
-
-```typescript
+```javascript
 // prepare operation
 const { operation: transfer } = await tokenContract['transfer']({
   from: account1Sign.address,
@@ -58,8 +88,8 @@ const { operation: allow } = await modContract['allow']({
 }, { onlyOperation: true });
 
 const tx = new Transaction({
-    signer: account1Sign,
-    provider,
+  signer: account1Sign,
+  provider,
 });
 
 await tx.pushOperation(allow);
@@ -68,9 +98,9 @@ const receipt = await tx.send();
 await tx.wait();
 ```
 
-## Scripts
+#### **Scripts**
 
-### Build
+##### Build
 
 To compile the package, run:
 
@@ -78,26 +108,26 @@ To compile the package, run:
 yarn build
 ```
 
-### Dist
+##### Dist
 
-To create a dist, run:
+To create a distribution, run:
 
 ```bash
 yarn dist
 ```
 
-### Test
+##### Test
 
-To test:
+To test the package, use:
 
 ```bash
 yarn jest
 ```
 
-## Contributing
+### **Contributing**
 
-Contributions are welcome! Please open an issue or submit a pull request on the [GitHub repository](https://github.com/veiveprotocol).
+Contributions are welcome! Please open an issue or submit a pull request on the [GitHub repository](https://github.com/veiveprotocol/mod-validation-any-as).
 
-## License
+### **License**
 
 This project is licensed under the MIT License. See the LICENSE file for details.
