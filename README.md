@@ -4,6 +4,9 @@
 
 `ModValidationAny` is a comprehensive validation module within the Veive protocol, designed specifically for the Koinos blockchain. This module employs an allowance mechanism to pre-authorize operations, ensuring that only actions explicitly approved by the user are executed. By leveraging this mechanism, `ModValidationAny` provides robust control over transaction execution, preventing unauthorized actions and potential replay attacks. Notably, this module is also applicable for validating internal operations, ensuring that even operations triggered within a contract are authorized.
 
+![image](https://github.com/user-attachments/assets/c95a225f-06f8-4c29-9360-b898fae18749)
+
+
 ## **Purpose**
 
 The `ModValidationAny` module serves as a pivotal component in the Veive ecosystem by validating operations against a set of pre-authorized allowances. This functionality is crucial for both external and internal operations, ensuring comprehensive security and control. Key features include:
